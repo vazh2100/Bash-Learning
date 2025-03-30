@@ -1,0 +1,1 @@
+`type -a` - Display information about command type.
