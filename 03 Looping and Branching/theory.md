@@ -139,7 +139,54 @@ echo $?
 
 [[ "$str1" =~ a*cc ]]
 echo $?
+```
+
+###### Выполнение по условию
+Синтаксис if elif else
+```bash
+if ((2 + 2 == 4)) && [[ "abc" =~ a.c ]]; then
+  echo first condition
+elif [ -e theory.mdd ]; then
+  echo second condition
+else
+  echo else section
+fi
+```
+
+```bash
+read name
+if [[ -z $name ]]
+then
+echo "No name entered" >&2
+exit 1 ## Set a failed return code
+fi
+```
+
+```bash
+printf "Enter a number not greater than 10: "
+read number
+if ((number > 10)); then
+  printf "%d is too big\n" "$number" >&2
+  exit 1
+else
+  printf "You entered %d\n" "$number"
+fi
 
 ```
+
+```bash
+printf "Enter a number between 10 and 20 inclusive: "
+read number
+if ((number < 10)); then
+  printf "%d is too low\n" "$number" >&2
+  exit 1
+elif ((number > 20)); then
+  printf "%d is too high\n" "$number" >&2
+  exit 1
+else
+  printf "You entered %d\n" "$number"
+fi
+```
+
 
 
