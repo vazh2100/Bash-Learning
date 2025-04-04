@@ -198,5 +198,45 @@ cd notexisted || echo "not existed"
 
 ```
 
+###### Выполнение по условию case
+
+```bash
+a=abcd
+b=bcd
+case $a in
+*$b*) true ;;
+*) false ;;
+esac
+echo $?
+```
+Проверка - строка является числом?
+```bash
+string=20
+case $string in
+*[!0-9]*) false ;;
+*) true ;;
+esac
+echo $?
+```
+
+```bash
+case $# in
+3) ;; ## We need 3 args, so do nothing
+*)
+  printf "%s\n" "Please provide three names" >&2
+  exit 1
+  ;;
+esac
+
+```
+
+###### Wildcards
+Более ограниченные, чем регулярные выражения
+`*` - любое количество любых символов
+`?` - один любой символ
+`[abc]` - любой символ из списка
+`[a-z]` - любой символ из диапазона
+`[^abc]` - любой символ, не входящий в список
+
 
 
