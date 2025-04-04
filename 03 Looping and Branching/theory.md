@@ -141,7 +141,7 @@ echo $?
 echo $?
 ```
 
-###### Выполнение по условию
+###### Выполнение по условию if elif else
 Синтаксис if elif else
 ```bash
 if ((2 + 2 == 4)) && [[ "abc" =~ a.c ]]; then
@@ -186,6 +186,16 @@ elif ((number > 20)); then
 else
   printf "You entered %d\n" "$number"
 fi
+```
+
+###### Выполнение по условию && ||
+
+```bash
+directory=../../../../..
+test -d "$directory" && cd "$directory"
+ls
+cd notexisted || echo "not existed"
+
 ```
 
 
