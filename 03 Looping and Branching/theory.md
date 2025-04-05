@@ -259,7 +259,7 @@ done
 
 ```bash
 while read -r line; do
-  if [[ $line =~ "######" ]]; then echo $line; fi
+  [[ $line =~ "######" ]] && echo $line || echo "not"
 done <theory.md
 
 ```
@@ -281,6 +281,42 @@ done
 
 for ((n = 1; n <= 10; ++n)); do
   echo "$n"
+done
+
+```
+
+###### Управление циклом break, continue
+`break` - выходит из текущего цикла
+`break 2` - выходит из текущего и из цикла родителя
+`continue` - прерывает текущий итерацию цикла и переходит к следующей
+```bash
+while :; do
+  read x
+  [ -z "$x" ] && break
+done
+
+```
+
+```bash
+for n in a b c d e; do
+  while true; do
+    if [ $RANDOM -gt 20000 ]; then
+      echo "first $n"
+      break 2 ## break out of both while and for loops
+    elif [ $RANDOM -lt 10000 ]; then
+      echo "second $n"
+      break ## break out of the while loop
+    fi
+    echo "third $n"
+  done
+done
+```
+
+```bash
+for n in {1..9}; do
+  x=$RANDOM
+  [ $x -le 20000 ] && continue
+  echo "n=$n x=$x"
 done
 
 ```
