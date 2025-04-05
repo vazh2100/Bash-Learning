@@ -238,5 +238,49 @@ esac
 `[a-z]` - любой символ из диапазона
 `[^abc]` - любой символ, не входящий в список
 
+###### Зацикливание while, until
+```bash
+a=100
+while ((a > 0)); do
+  echo $a
+  a=$((a - 3))
+done | awk '$1 % 2 == 0 { print }'
 
+```
 
+```bash
+n=1
+while [ $n -le 10 ]; do
+  echo "$n"
+  n=$(($n + 1))
+done
+
+```
+
+```bash
+while read -r line; do
+  if [[ $line =~ "######" ]]; then echo $line; fi
+done <theory.md
+
+```
+
+```bash
+n=1
+until [ $n -gt 10 ]; do
+  echo "$n"
+  n=$(($n + 1))
+done
+
+```
+
+###### Зацикливание for each and for
+```bash
+for var in Canada USA Mexico; do
+  printf "%s\n" "$var"
+done
+
+for ((n = 1; n <= 10; ++n)); do
+  echo "$n"
+done
+
+```
