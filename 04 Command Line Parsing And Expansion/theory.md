@@ -189,5 +189,44 @@ var="qwerty : uiop :: e:r " ## : :: delimits 2 empty fields
 ./sa /bin/h*
 ./sa /bin/*k
 ./sa th?ory.*
+./sa th[ed][os][wr]y.*
+./sa "$#" "$(date "+%Y %m %d")" John\ Doe
+```
 
+###### Подстановка процесса
+`<(command)` - делает из вывода команды временный файл. На месте вызова образуется имя файла. Удобно, если команда в
+качестве аргумента ожидает файл.
+`>(command)` - создаёт временный файл и начинает принимать на ввод с клавиатуры. Не понял пока зачем это нужно.
+`${totalsize:=5}` - если переменная не проинициализирована, то она инициализируется значением 5
+
+```bash
+while read a; do
+  echo Записал
+done
+
+```
+
+```bash
+cat <(ls -l)
+
+```
+
+Из-за pipeline переменная total_size становится внутренней переменной цикла while и не доступна за пределами
+```bash
+cd ~
+ls -l * | while read perms links owner group size month day time file; do
+  printf "%10d %s\n" "$size" "$file"
+  total_size=$((total_size + ${size:-0}))
+done
+echo "${total_size-unset}" #  unset
+```
+
+Подстановка процесса позволяет решить эту проблему. Создаётся файл и отдаётся на ввод "<" команде read. read читает,
+пока есть что читать. Total size остаётся видимой переменой
+```bash
+cd ~
+while read perms links owner group size month day time file; do
+  totalsize=$((${totalsize:=0} + ${size:-0}))
+done < <(ls -l *)
+echo ${totalsize-unset}
 ```
