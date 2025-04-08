@@ -3,7 +3,7 @@
 Shell Bourne может принимать только 9 позиционных параметра.
 Bash может больше, только обращаться нужно к ним через фигурные скобки `${12}`
 
-`shift N` сдвигает позиционные параметры в минус N позицию
+`shift N` сдвигает позиционные параметры в минус N позицию, тем самым удаляя их.
 
 `$*` - все аргументы объединяются в одну строку через пробел
 `$@` - все аргументы объединяются в массив
@@ -43,7 +43,8 @@ printf "%s\n" Print arguments on "separate\tlines"
 printf "%b\n" "Hello\nworld" "12\tword"
 ```
 ```bash
-printf "%d\n" 23 45 56.78 0xff 017
+LC_NUMERIC=C
+printf "%d\n" 23 45 56.78 0xff 017 #017 - восьмеричная
 ```
 ```bash
 LC_NUMERIC=C
@@ -99,13 +100,14 @@ stderr - 2
 `exec 2>errorfile.txt` - с момента вызова перенаправляет все ошибки в файл
 
 ```bash
-printf '%s\n%v\n' OK? Oops! > FILE 2> ERRORFILE
+printf '%s\n%v\n' OK? Oops! 1> FILE 2> ERRORFILE
 ```
 
 ```bash
-printf '%s\n%v\n' OK? Oops! >FILE 2>&1
-printf '%s\n%v\n' OK? Oops! &> FILE
-printf '%s\n%v\n' OK? Oops! &>> FILE
+printf '%s\n%v\n' OK? Oops! 1>FILE 2>&1
+printf '%s\n%v\n' OK? Oops! &>FILE
+printf '%s\n%v\n' OK? Oops! &>>FILE
+
 ```
 
 ```bash
