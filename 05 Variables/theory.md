@@ -101,6 +101,60 @@ a=ф
 : ${a:?An argument is required} ${b?Two arguments are required}
 echo "Are we here?"
 ```
-######
+###### Posix Shell. Длина, обрезка с начала и с конца
+
+`${#var}` - возвращает длину значения переменной
+`${var%PATTERN}` - обрезает значение переменной с конца по первому совпадению
+`${var%%PATTERN}` - обрезает значение переменной с конца по последнему совпадению
+`${var#PATTERN}` - обрезает значение переменной с начала по первому совпадению
+`${var##PATTERN}` - обрезает значение переменной с начала по последнему совпадению
+
+```bash
+read passwd
+if [ ${#passwd} -lt 8 ]; then
+  printf "Password is too short: %d characters\n" "${#passwd}" >&2
+  exit 1
+fi
+```
+```bash
+var=Wollongong
+printf "%s\n" "${var%o*}"
+printf "%s\n" "${var%%o*}"
+printf "%s\n" "${var#*o}"
+printf "%s\n" "${var##*o}"
+```
+
+###### Bash. Поиск и замена, подстрока, непрямая ссылка
+`${var/PATTERN/STRING}` заменяет первое найденные совпадения на STRING
+`${var//PATTERN/STRING}` заменяет все найденные совпадения на STRING
+`${var:OFFSET:LENGTH}` возвращает подстроку
+
+```bash
+passwd=zxQ1.=+-a
+echo "${passwd/?/*}"
+echo "${passwd//?/*}"
+```
+```bash
+var=Wollongong
+printf "%s\n" "${var//o/e}"
+./sa "${var:4:3}"  # Начать с индекса 4 включительно и взять 3 символа
+./sa "${var:4}"    # Начать с индекса 4 включительно и взять до конца
+./sa "${var: -4}"  # Начать с 4 символа с конца включительно и взять до конца
+./sa "${var:0:-4}" # Начать с индекса 0 и взять до 4 символа с конца исключительно
+```
+
+`${!var}` - взять значение var, найти переменную с таким же именем и взять у нёё значение
+```bash
+a=value
+b=a
+c=b
+d=c
+echo ${!d}
+eval "echo \$$d"
+```
+
+###### Bash 4.0. toUppercase, toLowercase
+
+###### Bash 4.0. toUppercase, toLowercase
 
 
