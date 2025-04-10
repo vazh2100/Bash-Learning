@@ -97,7 +97,7 @@ exit
 `${var?message}` - если переменная не задана, то в поток ошибок добавится message, скрипт выходит
 
 ```bash
-a=ф
+a=value
 : ${a:?An argument is required} ${b?Two arguments are required}
 echo "Are we here?"
 ```
