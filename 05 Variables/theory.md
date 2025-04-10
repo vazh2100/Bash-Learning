@@ -134,6 +134,7 @@ passwd=zxQ1.=+-a
 echo "${passwd/?/*}"
 echo "${passwd//?/*}"
 ```
+
 ```bash
 var=Wollongong
 printf "%s\n" "${var//o/e}"
@@ -143,7 +144,7 @@ printf "%s\n" "${var//o/e}"
 ./sa "${var:0:-4}" # Начать с индекса 0 и взять до 4 символа с конца исключительно
 ```
 
-`${!var}` - взять значение var, найти переменную с таким же именем и взять у нёё значение
+`${!var}` - взять значение var, найти переменную с таким же именем и взять у неё значение
 ```bash
 a=value
 b=a
@@ -154,7 +155,53 @@ eval "echo \$$d"
 ```
 
 ###### Bash 4.0. toUppercase, toLowercase
+`${var^PATTERN}`  - делает первое совпадение с большой буквы, PATTERN опционален
+`${var^^PATTERN}` - делает все совпадения с большой буквы, PATTERN опционален
+`${var,PATTERN}`  - делает первое совпадение с маленькой буквы, PATTERN опционален
+`${var,,PATTERN}` - делает все совпадения с маленькой буквы, PATTERN опционален
+`${var~PATTERN}`  - инвертирует первое совпадение, PATTERN опционален
+`${var~~PATTERN}` - инвертирует все совпадения, PATTERN опционален
 
-###### Bash 4.0. toUppercase, toLowercase
+```bash
+var=melbourne
+./sa "${var^}"
+./sa "${var^[m-z]}"
+./sa "${var^^[a-l]}"
+./sa "${var^^[m-z]}"
+./sa "${var^^}"
+echo
+var=MELBOURNE
+./sa "${var,}"
+./sa "${var,[M-Z]}"
+./sa "${var,,[A-L]}"
+./sa "${var,,[M-Z]}"
+./sa "${var,,}"
+echo
+var=MELbouRNE
+./sa "${var~}"
+./sa "${var~~}"
+```
+
+###### Удаление позиционных параметров
+`shift "$#"`             удалить все параметры
+`shift "$(( $# - 2 ))"`  удалить все кроме последних двух
+
+```bash
+name() {
+  local param
+  for param in "$@"; do ## Можно просто for param, без in $@
+    echo $param
+  done
+  echo "$@"
+  while (($#)); do
+    echo $1
+    shift
+  done
+  echo "$@"
+}
+
+name 1 2 3 4 5
+```
+
 
 
