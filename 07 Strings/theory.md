@@ -82,3 +82,90 @@ reverse_string strip
 title=" für èlisé"
 echo ${title^^}
 ```
+
+###### Поиск совпадения независимо от регистра
+
+```bash
+read ok
+case $ok in
+  y | Y) echo "Great!" ;;
+  n | N)
+    echo Good-bye
+    exit 1
+    ;;
+  *) echo Invalid entry ;;
+esac
+```
+
+```bash
+read ok
+case $ok in
+  [yY]) echo "Great!" ;;
+  [nN])
+    echo Good-bye
+    exit 1
+    ;;
+  *) echo Invalid entry ;;
+esac
+```
+
+```bash
+read month_name
+lower_cased=${month_name,,}
+case $lower_cased in
+  jan*) month=1 ;;
+  feb*) month=2 ;;
+  dec*) month=12 ;;
+  [1-9] | 1[0-2]) month=$month_name ;; ## accept number if entered
+  *) echo "Invalid month: $month_name" >&2 ;;
+esac
+echo $month
+```
+
+Валидация переменных
+```bash
+validate_name() case $1 in
+  [!a-zA-Z_]* | *[!a-zA-Z0-9_]*) return 1 ;;
+esac
+
+for name in name1 2var first.name first_name last-name; do
+  validate_name "$name" && echo "  valid: $name" || echo "invalid: $name"
+done
+```
+
+###### Вставка, замена, удаление
+
+Вставка одних строк в другие
+```bash
+# bashsupport disable=BP2001
+insert_string() { # insert_string STRING INSERTION [POSITION]
+  local string=$1
+  local string_to_insert=$2
+  local insert_position=${3:-1}
+  local left right
+  local insert_string_result
+  left=${string:0:$insert_position}
+  right=${string:$insert_position}
+  insert_string_result=${left}${string_to_insert}${right}
+  echo $insert_string_result
+}
+insert_string JohnConor " Michailovich " 4
+```
+
+Вставка с переписыванием
+```bash
+overlay() { #@ USAGE:  overlay STRING SUBSTRING START
+  local string=$1
+  local overlay=$2
+  local overlay_position=$3
+  local left right
+  local overlay_result
+  left=${string:0:overlay_position} # Здесь знак доллара и {} не обязательны, как и $(())
+  right=${string:overlay_position+${#overlay}}
+  overlay_result=$left$overlay$right
+  echo $overlay_result
+}
+overlay Andromeda "ey and Alex" 4
+```
+
+Обрезка неугодных символов
