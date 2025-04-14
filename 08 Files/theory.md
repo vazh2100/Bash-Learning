@@ -24,3 +24,61 @@ done < kjv.txt
 
 time awk -F':' 'print $1, $2, $3, $4}' < kjv.txt
 ```
+
+###### External commands: cat
+
+`cat` - выводит содержимое файла/файлов в стандартный вывод
+Если какая-то команда не умеет читать из файла или умеет читать только из одного файла, то стоит использовать cat
+Если комнада умеет читать из файла, cat не нужно использовать.
+```bash
+cat thisfile.txt | head -n 25 > thatfile.txt ## WRONG
+head -n 25 thisfile.txt > thatfile.txt       ## CORRECT
+```
+
+```bash
+cat "$@" | while read x; do whatever; done
+while read x; do whatever; done < <(cat "$@")
+```
+
+###### External commands: head
+
+```bash
+head -n 5 kjv.txt
+```
+
+```bash
+{
+  read line1
+  read line2
+  read line3
+  read line4
+} < kjv.txt
+```
+
+Этот код кладёт каждую прочитанную строку в массив
+```bash
+for n in {1..4}; do
+  read lines[${#lines[@]}] # ${#lines[@]} - длина массива
+done < kjv.txt
+```
+Делает то же самое
+```bash
+mapfile -tn 4 lines < "$kjv" 
+```
+
+###### External commands: touch
+`touch` - обновляет временную метку файла или создаёт пустой файл, если файла не существует
+`touch -d DATE` - обновляет временную метку файла на заданную дату
+
+Для создания файла лучше всего использовать пустое перенаправление? Это быстрее
+```bash
+> file.txt # Создаст или перезапишет файл
+
+for file in {a..z}.txt; do
+  > "$file"
+done
+
+#>> file.txt # Не обновит временную метку
+
+```
+
