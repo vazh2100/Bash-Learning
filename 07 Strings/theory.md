@@ -169,3 +169,80 @@ overlay Andromeda "ey and Alex" 4
 ```
 
 Обрезка неугодных символов
+```bash
+var="   John    "
+while :; do
+  case $var in
+    ' '*) var=${var#?} ;;
+    *' ') var=${var%?} ;;
+    *) break ;;
+  esac
+done
+./sa "$var"
+```
+
+```bash
+var="   John    "
+right_spaces=${var##*[! ]}
+var=${var%"$right_spaces"}
+left_spaces=${var%%[! ]*}
+var=${var#"$left_spaces"}
+./sa "$var"
+
+```
+
+```bash
+var="   John    "
+var="${var#"${var%%[! ]*}"}" 
+var="${var%"${var##*[! ]}"}"
+./sa "$var"
+```
+
+```bash
+trim() {
+  local input="$1"
+  local char_to_trim="${2:- }"
+
+  local trailing="${input##*[!$char_to_trim]}"
+  input="${input%"$trailing"}"
+
+  local leading="${input%%[!$char_to_trim]*}"
+  input="${input#"$leading"}"
+  trim_result=$input
+}
+trim "  aabbaaJohnaababaa  " "ab "
+./sa "$trim_result"
+```
+
+```bash
+index() { #@ Store position of $2 in $1 in $_INDEX
+  local idx
+  index_result=
+  case $1 in
+    "")
+      index_result=0
+      return 1
+      ;;
+    *"$2"*)
+      idx=${1%%"$2"*}
+      index_result=$((${#idx} + 1))
+      ;;
+    *)
+      index_result=0
+      return 1
+      ;;
+  esac
+}
+
+month2num() {
+  local months=JAN.FEB.MAR.APR.MAY.JUN.JUL.AUG.SEP.OCT.NOV.DEC
+  local input=${1:0:3}
+  input=${input^^}
+
+  index "$months" "$input" || return 1
+  month2num_result=$(($index_result / 4 + 1))
+}
+
+month2num december
+echo $month2num_result
+```
