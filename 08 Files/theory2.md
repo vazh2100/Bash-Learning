@@ -53,17 +53,11 @@ END { print verse }' kjv.txt
 ```
 
 ```bash
-awk '/Jesus wept/ {
- print previousline
- print $0
- n = 1
- next
- }
-n == 1 {
- print $0
- n = 2
- }
- {
- previousline = $0
- }' kjv.txt
+awk '
+/Jesus wept/ { print previous_line; print $0; n = 1; next }
+n == 1 { print $0;  exit  }
+{ previous_line = $0 }
+' kjv.txt
 ```
+
+

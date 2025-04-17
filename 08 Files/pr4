@@ -1,0 +1,6 @@
+#!/bin/bash
+
+## calculate column width
+width=$(((${COLUMNS:-80} - 2) / 4))
+s=%-$width.${width}s
+printf "$s $s $s $s\n" "$@"
