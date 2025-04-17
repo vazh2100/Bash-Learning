@@ -83,6 +83,4 @@ until read -sn1 -t$delay -p "$prompt" var; do ## loop until user presses a key
   spinner=$temp${spinner%"$temp"} ## and add it to the end
 done
 printf "$CR$clear_line"
-
 ```
-
